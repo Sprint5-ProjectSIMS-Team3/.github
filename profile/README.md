@@ -151,7 +151,7 @@ Breve resumen de cada dependencia del proyecto y el motivo de su elección.
 - Para manejo de datos remotos y cache se prefirió @tanstack/vue-query por sus garantías y lógica out-of-the-box.
 - Para UI se combinan utilidades (Tailwind, clsx, class-variance-authority) con primitives accesibles (radix-vue) y un kit propio (reka-ui) para acelerar el desarrollo consistente.
 
-Si quieres, creo un README más breve por módulo (auth, tickets, users) explicando qué librerías usa cada uno.
+
 
 ### Backend
 - **Laravel**
