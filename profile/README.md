@@ -43,65 +43,115 @@ Dado que el uso de una SPA hace que la página no sea indexable por Google por d
 
 # Frontend
 
-##  Tecnologías base
+# Librerías usadas y por qué las elegimos
 
-- **Vue 3 + TypeScript** → Framework progresivo con tipado fuerte, ideal para construir interfaces reactivas y escalables.  
-- **Tailwind CSS** → Framework de utilidades CSS que permite crear diseños consistentes y modernos de forma ágil.
+Breve resumen de cada dependencia del proyecto y el motivo de su elección.
 
----
+## Dependencias (runtime)
 
-##  Librerías principales
+- vue
+  - Para qué sirve: Framework principal (UI, reactividad, Composition API).
+  - Por qué: Ecosistema maduro, rendimiento y compatibilidad con TypeScript.
 
-- **vue3-toastify** → Manejo de notificaciones mediante un *composable* `useToast`, que estandariza el aspecto y comportamiento de los mensajes.  
-- **@headlessui/vue** → Componentes accesibles y sin estilos predefinidos (*headless*), fáciles de personalizar con Tailwind.  
-- **@heroicons/vue** → Conjunto de íconos SVG personalizables y optimizados para Vue.  
-- **Leaflet (leaflet.js + leaflet.css)** → Librería ligera para mapas interactivos; usada para renderizar el mapa principal, gestionar marcadores dinámicos y controlar interacciones (zoom, pan).  
-- **OpenStreetMap (Tile Provider)** → Fuente de datos de mapas abiertos utilizada como capa base de Leaflet, evitando la dependencia de servicios propietarios como Google Maps.
+- vue-router
+  - Para qué sirve: Enrutado de la SPA.
+  - Por qué: Integración nativa con Vue 3 y soporte de rutas anidadas y lazy-loading.
 
----
+- pinia
+  - Para qué sirve: Gestión de estado global.
+  - Por qué: API simple, orientada a TypeScript y recomendada por la comunidad Vue.
 
-## Dependencias adicionales
+- axios
+  - Para qué sirve: Cliente HTTP para llamadas a API.
+  - Por qué: Manejo sencillo de interceptores, timeouts y respuestas; más ergonomía que fetch en casos complejos.
 
-Estas dependencias complementan el ecosistema de Vue y mejoran la arquitectura, la gestión de datos y la interfaz de usuario:
+- @tanstack/vue-query
+  - Para qué sirve: Gestión y cache de datos remotos (server state).
+  - Por qué: Sincronización automática, cache, reintentos y políticas de refetch robustas.
 
-###  Gestión de estado y datos
-- `pinia`  
-- `@tanstack/vue-query`
+- @tanstack/vue-table
+  - Para qué sirve: Helpers y hooks para construir tablas avanzadas.
+  - Por qué: Flexibilidad y rendimiento para tablas con paginación, sorting y filtrado.
 
-### Ruteo y composición
-- `vue-router`  
-- `@vueuse/core`
+- @vueuse/core
+  - Para qué sirve: Colección de utilidades reactivas reutilizables.
+  - Por qué: Evita reinventar hooks comunes (debounce, localStorage, etc.).
 
-###  Validación y utilidades
-- `zod`  
-- `clsx`  
-- `class-variance-authority`  
-- `tailwind-merge`
+- zod
+  - Para qué sirve: Validación y parsing de datos en runtime con inferencia de tipos.
+  - Por qué: Seguridad al validar payloads y generación de tipos TypeScript a partir de esquemas.
 
-###  UI y componentes reutilizables
-- `radix-vue`  
-- `reka-ui`  
-- `lucide-vue-next`  
-- `vue-sonner`  
-- `tailwindcss-animate`
+- pinia
+  - (ya descrito arriba)
 
-###  HTTP y cookies
-- `axios`  
-- `vue3-cookies`
+- lucide-vue-next
+  - Para qué sirve: Iconos SVG listos para Vue.
+  - Por qué: Set ligero y consistente visualmente.
 
-###  Tablas dinámicas
-- `@tanstack/vue-table`
+- radix-vue
+  - Para qué sirve: Componentes accesibles de bajo nivel (primitives).
+  - Por qué: Facilita accesibilidad y control cuando se necesita construir componentes personalizados.
 
----
+- reka-ui
+  - Para qué sirve: Biblioteca de componentes (UI kit) usada en el proyecto.
+  - Por qué: Acelerador de desarrollo con componentes reutilizables del equipo/proyecto.
 
-## Resumen
+- tailwind-merge
+  - Para qué sirve: Mezclar clases Tailwind evitando duplicados/conflictos.
+  - Por qué: Útil en utilidades y componentes que combinan clases dinámicamente.
 
-Este stack permite un desarrollo **ágil, modular y mantenible**, con:
-- Interfaces reactivas y personalizables  
-- Manejo eficiente de datos y estado  
-- Validaciones robustas  
-- Integración fluida con TailwindCSS y librerías UI modernas  
-- Notificaciones y mapas interactivos en tiempo real
+- tailwindcss-animate
+  - Para qué sirve: Clases de animación listas para usar con Tailwind.
+  - Por qué: Consistencia y facilidad para animaciones cotidianas.
+
+- vue-sonner
+  - Para qué sirve: Toasters/notifications para Vue.
+  - Por qué: Integración simple y estilizada para notificaciones UX.
+
+- vue3-cookies
+  - Para qué sirve: API para leer/escribir cookies en Vue 3.
+  - Por qué: Manejo sencillo de cookies (sesión, token, preferencias).
+
+- class-variance-authority
+  - Para qué sirve: Definir variantes de clases CSS de forma tipada.
+  - Por qué: Facilita construir componentes con variantes (size, color) de forma segura.
+
+- clsx
+  - Para qué sirve: Concatenar clases condicionalmente.
+  - Por qué: Sintaxis ligera y eficiente para clases dinámicas.
+
+## DevDependencies (herramientas de desarrollo)
+
+- vite / @vitejs/plugin-vue
+  - Para qué sirve: Bundler/dev server rápido para Vue 3.
+  - Por qué: Experiencia de desarrollo muy rápida y build optimizado.
+
+- typescript / vue-tsc
+  - Para qué sirve: Tipado estático y verificación de tipos para Vue.
+  - Por qué: Mayor seguridad y detección temprana de errores.
+
+- tailwindcss / @tailwindcss/postcss / tailwindcss-animate (dev)
+  - Para qué sirve: Framework CSS utilitario y pipeline PostCSS.
+  - Por qué: Velocidad para crear UI consistentes y responsive.
+
+- npm-run-all2
+  - Para qué sirve: Ejecutar múltiples scripts npm en paralelo/serie.
+  - Por qué: Orquestar pasos de build y type-check de forma simple.
+
+- @tsconfig/node24, @vue/tsconfig, @types/node
+  - Para qué sirve: Presets y tipos para TypeScript.
+  - Por qué: Configuración consistente y tipos de Node para herramientas.
+
+- vite-plugin-vue-devtools
+  - Para qué sirve: Integración con devtools extendidos en desarrollo.
+  - Por qué: Mejora la depuración de componentes en local.
+
+## Notas finales
+- Se eligieron librerías que favorecen productividad, tipado y experiencia de desarrollador (Vite, TS, Pinia).
+- Para manejo de datos remotos y cache se prefirió @tanstack/vue-query por sus garantías y lógica out-of-the-box.
+- Para UI se combinan utilidades (Tailwind, clsx, class-variance-authority) con primitives accesibles (radix-vue) y un kit propio (reka-ui) para acelerar el desarrollo consistente.
+
+Si quieres, creo un README más breve por módulo (auth, tickets, users) explicando qué librerías usa cada uno.
 
 ### Backend
 - **Laravel**
