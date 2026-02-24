@@ -41,17 +41,67 @@ Dado que el uso de una SPA hace que la página no sea indexable por Google por d
 
 ## Resumen del Tech Stack
 
-### Frontend
-- **Vue**
-- **TypeScript**
-- **Tailwind CSS**
+# Frontend
 
-#### Librerías
-- **vue3-toastify:** Facilita la gestión de notificaciones (toasts). Creamos un composable `useToast` con una función `showToast` que toma la funcionalidad normal y añade parámetros para estandarizar el aspecto y comportamiento de nuestros errores.
-- **@headlessui/vue:** Gestión sencilla de componentes UI accesibles y sin estilos predefinidos (headless).
-- **@heroicons/vue:** Gestión sencilla de iconos vectoriales.
-- **Leaflet (leaflet.js + leaflet.css):** Librería JavaScript ligera para mapas interactivos. La usamos para renderizar el mapa principal, gestionar marcadores dinámicos en tiempo real y controlar interacciones (zoom, pan).
-- **OpenStreetMap (Tile Provider):** Datos de mapas de código abierto usados como capa base. Configuramos Leaflet con una URL de OpenStreetMap para no depender de servicios propietarios como Google Maps.
+##  Tecnologías base
+
+- **Vue 3 + TypeScript** → Framework progresivo con tipado fuerte, ideal para construir interfaces reactivas y escalables.  
+- **Tailwind CSS** → Framework de utilidades CSS que permite crear diseños consistentes y modernos de forma ágil.
+
+---
+
+##  Librerías principales
+
+- **vue3-toastify** → Manejo de notificaciones mediante un *composable* `useToast`, que estandariza el aspecto y comportamiento de los mensajes.  
+- **@headlessui/vue** → Componentes accesibles y sin estilos predefinidos (*headless*), fáciles de personalizar con Tailwind.  
+- **@heroicons/vue** → Conjunto de íconos SVG personalizables y optimizados para Vue.  
+- **Leaflet (leaflet.js + leaflet.css)** → Librería ligera para mapas interactivos; usada para renderizar el mapa principal, gestionar marcadores dinámicos y controlar interacciones (zoom, pan).  
+- **OpenStreetMap (Tile Provider)** → Fuente de datos de mapas abiertos utilizada como capa base de Leaflet, evitando la dependencia de servicios propietarios como Google Maps.
+
+---
+
+## Dependencias adicionales
+
+Estas dependencias complementan el ecosistema de Vue y mejoran la arquitectura, la gestión de datos y la interfaz de usuario:
+
+###  Gestión de estado y datos
+- `pinia`  
+- `@tanstack/vue-query`
+
+### Ruteo y composición
+- `vue-router`  
+- `@vueuse/core`
+
+###  Validación y utilidades
+- `zod`  
+- `clsx`  
+- `class-variance-authority`  
+- `tailwind-merge`
+
+###  UI y componentes reutilizables
+- `radix-vue`  
+- `reka-ui`  
+- `lucide-vue-next`  
+- `vue-sonner`  
+- `tailwindcss-animate`
+
+###  HTTP y cookies
+- `axios`  
+- `vue3-cookies`
+
+###  Tablas dinámicas
+- `@tanstack/vue-table`
+
+---
+
+## Resumen
+
+Este stack permite un desarrollo **ágil, modular y mantenible**, con:
+- Interfaces reactivas y personalizables  
+- Manejo eficiente de datos y estado  
+- Validaciones robustas  
+- Integración fluida con TailwindCSS y librerías UI modernas  
+- Notificaciones y mapas interactivos en tiempo real
 
 ### Backend
 - **Laravel**
