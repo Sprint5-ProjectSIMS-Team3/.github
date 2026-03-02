@@ -201,3 +201,6 @@ Usa mensajes de commit concisos y significativos con los siguientes prefijos:
 - **Fix**: `Fix: Fixed the users CRUD`
 - **Feat**: `Feat: Added users CRUD to the backend`
 - **Refactor**: `Refactor: Improved authentication logic`
+
+## Lista de funcionalidades, componentes y composables
+https://docs.google.com/spreadsheets/d/1s2lJcBCdCCeTxu5F6PwWKuIzcNNT5hhBrhVcwPwEjhM/edit?usp=sharing
