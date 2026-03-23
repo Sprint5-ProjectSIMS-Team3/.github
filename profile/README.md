@@ -156,9 +156,9 @@ Aquí dejamos documentado al detalle todo el stack que usamos y el porqué de ca
 
 Tenemos el código separado en tres repositorios dentro de esta misma organización. En el `README.md` de cada uno está la estructura de carpetas:
 
-* 📂 [Repositorio Frontend](./ruta-al-repo-frontend) 
-* 📂 [Repositorio Backend](./ruta-al-repo-backend) 
-* 📂 [Repositorio Subsistema IoT](./ruta-al-repo-iot)
+* 📂 [Repositorio Frontend](https://github.com/Sprint5-ProjectSIMS-Team3/sims-frontend) 
+* 📂 [Repositorio Backend](https://github.com/Sprint5-ProjectSIMS-Team3/sims-backend) 
+* 📂 [Repositorio Subsistema IoT](https://github.com/Sprint5-ProjectSIMS-Team3/sims-subsystem)
 
 ### Gobernanza
 * Hemos añadido un **Contributor Covenant** en todos los repositorios.
