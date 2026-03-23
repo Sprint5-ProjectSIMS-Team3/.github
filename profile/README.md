@@ -1,206 +1,172 @@
-# Sprint 4 – SIMS Project: Organization Hub
+# Sprint 5 – SIMS Project: Organization Hub (First Deployment)
+
+*(Taula de capçalera: Professorat: Xavi , Joan Iglesias, Maria Merino | Data: 15/09/2025 | Curs: DAW 2)*
 
 ## Overview
 
-En este sprint, tomamos todo lo aprendido durante el **Sprint 3** y lo aplicamos para construir una aplicación más robusta, escalable y profesional. El objetivo principal es modernizar la infraestructura hacia un ecosistema moderno de stack completo:
+Este es el repositorio central de nuestra organización para el Sprint 5. El objetivo principal de esta entrega es pasar de los prototipos que teníamos a una **versión Alfa completa y desplegada**. 
 
-- **Frontend**: **Vue**, **TypeScript** y **Tailwind CSS**.
-- **Backend**: **Laravel**.
-- **Base de Datos**: **PostgreSQL**.
-
----
-
-## Decisiones de Arquitectura y Estrategia
-
-### La Elección del Frontend (Implementación de Sabina)
-Hemos adoptado oficialmente la arquitectura de frontend propuesta por **Sabina**. Esta decisión se tomó para garantizar:
-* **Lógica Modular:** Uso de un enfoque basado en `composables` personalizados para la gestión del estado de forma reutilizable.
-* **Seguridad de Tipado:** Integración estricta de TypeScript para reducir errores en tiempo de ejecución.
-* **Consistencia de UI:** Implementación nativa de Tailwind CSS que facilita la consistencia visual en nuestro entorno.
-
-### La Elección del Backend (Implementación de Joel)
-El núcleo del backend desarrollado por **Joel** ha sido seleccionado como el estándar de la organización debido a:
-* **Seguridad:** Integración nativa de Laravel Sanctum para la autenticación segura de la API y gestión de tokens.
-* **RBAC Avanzado:** Implementación robusta de Spatie para el control granular de permisos y roles.
-
-### Arquitectura Multi-Tenant (SaaS B2B / B2G)
-La aplicación utiliza una **arquitectura multi-tenant** para:
-- Centralizar la gestión de clientes (tenants).
-- Mejorar la escalabilidad.
-- Simplificar el mantenimiento y los despliegues.
-
-*Cada tenant está lógicamente aislado mientras comparte la misma infraestructura de base de datos.*
-
-### Single-Page Application (SPA)
-El frontend se implementa como una **Single-Page Application (SPA)**. 
-
-#### Implicaciones
-Dado que el uso de una SPA hace que la página no sea indexable por Google por defecto, necesitaremos desarrollar una **Landing page** renderizada en el lado del servidor para poder ser indexados correctamente.
+Para conseguirlo, hemos montado una infraestructura moderna con el siguiente stack:
+- **Frontend**: Vue 3, TypeScript y Tailwind CSS.
+- **Backend**: Laravel (PHP).
+- **Base de Datos**: PostgreSQL.
+- **IoT**: Subsistema basado en Python.
 
 ---
 
-## Resumen del Tech Stack
+## 1. Reestructuración del Proyecto
 
-# Frontend
+Como en este sprint se han rehecho los grupos, lo primero que hicimos fue evaluar qué código base aprovechar. Al final decidimos unificar el proyecto usando las partes más completas que teníamos:
 
-# Librerías usadas y por qué las elegimos
+* **El Frontend de Sabina:** Nos hemos quedado con su arquitectura porque ya tenía una lógica muy modular (basada en `composables`), el tipado con TypeScript estaba muy bien integrado y visualmente era muy consistente gracias a Tailwind.
+* **El Backend de Joel:** Lo hemos elegido como estándar porque ya tenía implementado de forma muy robusta todo el tema de seguridad (Sanctum) y el sistema de roles y permisos con Spatie.
 
-Breve resumen de cada dependencia del proyecto y el motivo de su elección.
+### Arquitectura Multi-Tenant y SPA
+Nuestra aplicación funciona con una **arquitectura multi-tenant**. Esto nos permite centralizar la gestión de clientes: cada "tenant" (empresa/cliente) está aislado lógicamente, pero todos comparten la misma base de datos, lo que nos facilita mucho el mantenimiento.
 
-## Dependencias (runtime)
+El frontend es una **Single-Page Application (SPA)**. Como las SPA tienen el problema de que Google no las indexa bien, tenemos previsto hacer una Landing page renderizada desde el servidor para solucionar el tema del SEO.
 
-- vue
-  - Para qué sirve: Framework principal (UI, reactividad, Composition API).
-  - Por qué: Ecosistema maduro, rendimiento y compatibilidad con TypeScript.
+---
 
-- vue-router
-  - Para qué sirve: Enrutado de la SPA.
-  - Por qué: Integración nativa con Vue 3 y soporte de rutas anidadas y lazy-loading.
+## 2. Decisiones Técnicas del Sprint 5 (Investigación)
 
-- pinia
-  - Para qué sirve: Gestión de estado global.
-  - Por qué: API simple, orientada a TypeScript y recomendada por la comunidad Vue.
+Tal y como se pedía en los requisitos, aquí explicamos por qué hemos elegido ciertas herramientas clave para esta fase:
 
-- axios
-  - Para qué sirve: Cliente HTTP para llamadas a API.
-  - Por qué: Manejo sencillo de interceptores, timeouts y respuestas; más ergonomía que fetch en casos complejos.
+### Gestión de estado (State Management): ¿Por qué Pinia?
+Para centralizar los datos en el frontend y no freír el servidor a peticiones, estuvimos mirando Vuex, Redux y Pinia. 
+* Redux lo descartamos porque es demasiado complejo y se usa más en React. 
+* Vuex era el estándar antes, pero te obliga a usar "mutaciones", lo que hace que escribas mucho código repetitivo. 
+* **Nos quedamos con Pinia** porque es el estándar oficial actual para Vue 3. Es mucho más simple, funciona perfecto con TypeScript (nos autocompleta los tipos sin configurar nada) y encaja genial con la Composition API que ya estábamos usando.
 
-- @tanstack/vue-query
-  - Para qué sirve: Gestión y cache de datos remotos (server state).
-  - Por qué: Sincronización automática, cache, reintentos y políticas de refetch robustas.
+### Depuración en el Backend: ¿Por qué Laravel Telescope?
+Para depurar los errores de la aplicación estuvimos comparando Xdebug, Sentry y Telescope. 
+Xdebug está muy bien para ir línea por línea en local, y Sentry es brutal para ver errores de usuarios en producción. Sin embargo, para esta fase Alfa, **hemos elegido Laravel Telescope**. Nos da un panel dentro del propio Laravel donde podemos ver de un vistazo todas las peticiones HTTP, las consultas a la base de datos (para ver si alguna va lenta) y los Webhooks que nos llegan del IoT.
 
-- @tanstack/vue-table
-  - Para qué sirve: Helpers y hooks para construir tablas avanzadas.
-  - Por qué: Flexibilidad y rendimiento para tablas con paginación, sorting y filtrado.
+---
 
-- @vueuse/core
-  - Para qué sirve: Colección de utilidades reactivas reutilizables.
-  - Por qué: Evita reinventar hooks comunes (debounce, localStorage, etc.).
+## 3. Usabilidad, Tests y Rendimiento
 
-- zod
-  - Para qué sirve: Validación y parsing de datos en runtime con inferencia de tipos.
-  - Por qué: Seguridad al validar payloads y generación de tipos TypeScript a partir de esquemas.
+### Mejoras de Interfaz (Filosofía de Steve Krug)
+Hemos intentado aplicar el concepto de "No me hagas pensar" de Steve Krug para que la web sea más intuitiva. Algunos de los cambios que hemos metido son:
+* *[Añadir mejora 1: ej. Hemos simplificado el menú lateral para que las acciones principales estén a un clic]*
+* *[Añadir mejora 2: ej. Usamos colores semánticos (verde/rojo) para que el estado de los vehículos se entienda sin leer]*
+* *[Añadir mejora 3: ej. Hemos puesto toasters (notificaciones) para que el usuario siempre sepa si una acción ha ido bien o mal]*
 
-- pinia
-  - (ya descrito arriba)
+### Tests de Usabilidad
+Le hemos pedido a varias personas que no conocían la aplicación (amigos y familiares) que intenten usarla. Les hemos asignado roles y hemos grabado la pantalla y sus voces para ver dónde se atascaban.
+* 📄 **[Enlace al Informe de Usabilidad en PDF]**
+* 🎥 **[Enlace a la carpeta con los vídeos de las pruebas]**
 
-- lucide-vue-next
-  - Para qué sirve: Iconos SVG listos para Vue.
-  - Por qué: Set ligero y consistente visualmente.
+### Rendimiento
+Hemos pasado el "Lighthouse" de Chrome para analizar la velocidad de la página. 
+* **Mejoras aplicadas:** *[Añadir qué habéis tocado, ej: Hemos optimizado el peso de las imágenes y configurado lazy-loading para mejorar el tiempo de carga].*
 
-- radix-vue
-  - Para qué sirve: Componentes accesibles de bajo nivel (primitives).
-  - Por qué: Facilita accesibilidad y control cuando se necesita construir componentes personalizados.
+---
 
-- reka-ui
-  - Para qué sirve: Biblioteca de componentes (UI kit) usada en el proyecto.
-  - Por qué: Acelerador de desarrollo con componentes reutilizables del equipo/proyecto.
+## 4. Funcionalidades, Roles y Chatbot IA
 
-- tailwind-merge
-  - Para qué sirve: Mezclar clases Tailwind evitando duplicados/conflictos.
-  - Por qué: Útil en utilidades y componentes que combinan clases dinámicamente.
+El sistema distingue entre varios tipos de usuarios:
+1. **Superadmin:** Controla toda la plataforma y los Tenants.
+2. **Tenant Admin:** Gestiona la flota y los usuarios de su propia empresa.
+3. **Tenant Worker:** Se encarga del mantenimiento y las incidencias.
+4. **Final User:** El cliente que alquila el vehículo.
 
-- tailwindcss-animate
-  - Para qué sirve: Clases de animación listas para usar con Tailwind.
-  - Por qué: Consistencia y facilidad para animaciones cotidianas.
+👉 **[En este Google Sheets tenéis la matriz completa con todas las funcionalidades por rol y los componentes que compartimos](https://docs.google.com/spreadsheets/d/1s2lJcBCdCCeTxu5F6PwWKuIzcNNT5hhBrhVcwPwEjhM/edit?usp=sharing)**
 
-- vue-sonner
-  - Para qué sirve: Toasters/notifications para Vue.
-  - Por qué: Integración simple y estilizada para notificaciones UX.
+### Sección de Ayuda (Chatbot RAG)
+Hemos montado una sección de ayuda para los usuarios. Funciona con un Chatbot nutrido con nuestra propia documentación (tipo RAG) y hace llamadas a la API de la IA del instituto (`api-ia.daw2.iesmontsia.org:3000/api`). Dependiendo de si entra un Superadmin o un Cliente normal, la IA adapta sus respuestas a lo que ese usuario puede hacer.
 
-- vue3-cookies
-  - Para qué sirve: API para leer/escribir cookies en Vue 3.
-  - Por qué: Manejo sencillo de cookies (sesión, token, preferencias).
+---
 
-- class-variance-authority
-  - Para qué sirve: Definir variantes de clases CSS de forma tipada.
-  - Por qué: Facilita construir componentes con variantes (size, color) de forma segura.
+## 5. Estado del Subsistema IoT
 
-- clsx
-  - Para qué sirve: Concatenar clases condicionalmente.
-  - Por qué: Sintaxis ligera y eficiente para clases dinámicas.
+Para dejar claro en qué punto estamos con el hardware:
+* **Estado Actual:** *[Enlace al diagrama de diseño y al modelo de datos JSON]*
+* **Sensores elegidos:** *[Listar sensores, ej: Hemos decidido tirar adelante con el módulo GPS para la posición]*
+* **Actuador ON/OFF:** Lo hemos implementado con *[explicar brevemente el relé o la placa]* que recibe las órdenes.
+* **Comunicación:** El frontend no toca el hardware directamente. Laravel hace de puente comunicándose con el subsistema mediante API y Webhooks. El objetivo de este sprint es dejarlo 100% operativo para que los de automoción puedan integrarlo en el siguiente sprint.
 
-## DevDependencies (herramientas de desarrollo)
+---
 
-- vite / @vitejs/plugin-vue
-  - Para qué sirve: Bundler/dev server rápido para Vue 3.
-  - Por qué: Experiencia de desarrollo muy rápida y build optimizado.
+## 6. Despliegue (First Deployment)
 
-- typescript / vue-tsc
-  - Para qué sirve: Tipado estático y verificación de tipos para Vue.
-  - Por qué: Mayor seguridad y detección temprana de errores.
+Ya tenemos la versión Alfa subida a internet. Como pide el sprint, hemos desplegado las cosas por separado en plataformas gratuitas (PaaS) y hemos automatizado el despliegue multitenant para que añadir nuevos clientes sea rápido.
 
-- tailwindcss / @tailwindcss/postcss / tailwindcss-animate (dev)
-  - Para qué sirve: Framework CSS utilitario y pipeline PostCSS.
-  - Por qué: Velocidad para crear UI consistentes y responsive.
+* **Frontend desplegado en:** *[Plataforma, ej: Vercel]*
+* **Backend desplegado en:** *[Plataforma, ej: Render]*
+* **Microservicio IoT:** *[Plataforma]*
 
-- npm-run-all2
-  - Para qué sirve: Ejecutar múltiples scripts npm en paralelo/serie.
-  - Por qué: Orquestar pasos de build y type-check de forma simple.
+📖 **[Enlace a nuestro Manual de Despliegue]**
 
-- @tsconfig/node24, @vue/tsconfig, @types/node
-  - Para qué sirve: Presets y tipos para TypeScript.
-  - Por qué: Configuración consistente y tipos de Node para herramientas.
+---
 
-- vite-plugin-vue-devtools
-  - Para qué sirve: Integración con devtools extendidos en desarrollo.
-  - Por qué: Mejora la depuración de componentes en local.
+## 7. Nuestro Tech Stack (Librerías y Justificación)
 
-## Notas finales
-- Se eligieron librerías que favorecen productividad, tipado y experiencia de desarrollador (Vite, TS, Pinia).
-- Para manejo de datos remotos y cache se prefirió @tanstack/vue-query por sus garantías y lógica out-of-the-box.
-- Para UI se combinan utilidades (Tailwind, clsx, class-variance-authority) con primitives accesibles (radix-vue) y un kit propio (reka-ui) para acelerar el desarrollo consistente.
+Aquí dejamos documentado al detalle todo el stack que usamos y el porqué de cada dependencia, algo que ya consolidamos en el sprint anterior.
 
+### Frontend
 
+**Dependencias principales (runtime):**
+- `vue`: Framework principal (UI, reactividad, Composition API). Ecosistema maduro, rendimiento y compatibilidad con TypeScript.
+- `vue-router`: Enrutado de la SPA. Integración nativa con Vue 3 y soporte de rutas anidadas.
+- `pinia`: Gestión de estado global (explicado arriba).
+- `axios`: Cliente HTTP para llamadas a la API. Nos facilita el manejo de interceptores y timeouts respecto a *fetch*.
+- `@tanstack/vue-query`: Gestión y caché de datos remotos (server state). Nos ahorra mucho trabajo sincronizando datos y haciendo reintentos.
+- `@tanstack/vue-table`: Helpers para construir tablas avanzadas con paginación y filtros.
+- `@vueuse/core`: Colección de utilidades reactivas (para no reinventar la rueda con cosas como localStorage).
+- `zod`: Validación de datos en runtime para ir seguros con los payloads.
+- `lucide-vue-next`: Iconos SVG listos para Vue.
+- `radix-vue`: Componentes accesibles de bajo nivel.
+- `reka-ui`: Biblioteca de componentes (UI kit) que usamos en el proyecto para ir más rápido.
+- `tailwind-merge` y `clsx`: Para mezclar y concatenar clases de Tailwind sin que haya conflictos.
+- `tailwindcss-animate`: Clases de animación.
+- `vue-sonner`: Para los toasters/notificaciones de la interfaz.
+- `vue3-cookies`: Manejo sencillo de cookies de sesión/preferencias.
+- `class-variance-authority`: Para definir variantes de clases CSS de forma tipada.
+
+**DevDependencies (herramientas de desarrollo):**
+- `vite` / `@vitejs/plugin-vue`: Nuestro bundler. Compila rapidísimo.
+- `typescript` / `vue-tsc`: Tipado estático.
+- `tailwindcss` / `@tailwindcss/postcss`: Framework CSS.
+- `npm-run-all2`: Para ejecutar varios scripts de npm a la vez.
+- `vite-plugin-vue-devtools`: Nos integra las devtools directamente en el entorno local.
+
+*En resumen: Elegimos librerías que nos den productividad y un buen tipado. Para los datos remotos nos fiamos de vue-query, y para la UI combinamos Tailwind con radix-vue y reka-ui para tener componentes accesibles y consistentes.*
 
 ### Backend
-- **Laravel**
+- **Framework:** Laravel
+- **Base de Datos:** PostgreSQL
 
-#### Librerías
-- **Sanctum:** Añade tokens y se encarga de la seguridad y autenticación de Laravel.
-- **Spatie (laravel-permission):** Forma fácil y robusta de gestionar roles y permisos. Implementa un sistema de Control de Acceso Basado en Roles (RBAC) que nos permite asignar roles (Admin, Client, Maintenance) y permisos granulares (ej. `can.activate.reservation`). 
-- **nesbot/carbon:** Extensión para el manejo de fechas y horas en PHP. Crucial en el `ReservationController` para operaciones sensibles al tiempo, como calcular la duración exacta de los viajes (`diffInMinutes`) para el coste final, y gestionar la caducidad de reservas.
-
-### Base de Datos
-- **PostgreSQL**
+**Librerías principales:**
+- **Sanctum:** Nos gestiona los tokens y la seguridad de la API.
+- **Spatie (laravel-permission):** Nos permite montar el sistema de Control de Acceso Basado en Roles (RBAC) con permisos granulares (ej. `can.activate.reservation`). 
+- **nesbot/carbon:** Básico para el manejo de fechas en PHP. Lo usamos a tope en el `ReservationController` para calcular la duración exacta de los viajes (`diffInMinutes`), cobrar lo que toca y gestionar cuándo caducan las reservas.
 
 ---
 
-## Repositorios del Proyecto
+## 8. Estructura de Repositorios y Reglas
 
-El código está dividido en dos repositorios principales. Consulta el `README.md` de cada uno para ver su **estructura de directorios** específica:
+Tenemos el código separado en tres repositorios dentro de esta misma organización. En el `README.md` de cada uno está la estructura de carpetas:
 
-* [**Repositorio Frontend **](./ruta-al-repo-frontend) 
-* [**Repositorio Backend **](./ruta-al-repo-backend) 
+* 📂 [Repositorio Frontend](./ruta-al-repo-frontend) 
+* 📂 [Repositorio Backend](./ruta-al-repo-backend) 
+* 📂 [Repositorio Subsistema IoT](./ruta-al-repo-iot)
 
----
+### Gobernanza
+* Hemos añadido un **Contributor Covenant** en todos los repositorios.
+* El proyecto está bajo la licencia **EUPL**.
 
-## Convenciones de Código Globales
-
-Para garantizar la consistencia y legibilidad en todo el proyecto, se deben seguir las siguientes convenciones:
-
+### Convenciones de Código
+Todos intentamos seguir estas reglas para mantener el código limpio:
 - **Composables**: `useComposableName.ts`
 - **Componentes**: `PascalCase.vue`
 - **Clases**: `PascalCase`
 - **Rutas**: `kebab-case`
-- **Variables, funciones y otros**: `camelCase`
+- **Variables y funciones**: `camelCase`
+- **Idioma:** Todo el código, nombres de archivos y comentarios **deben estar en inglés**.
 
-### Reglas Generales
-- Todos los comentarios, nombres de archivos y el contenido de los mismos **deben estar escritos en inglés**.
-- Por favor, mantén el código limpio, legible y bien estructurado.
-
----
-
-## Flujo de Trabajo y Commits
-
-Consulta el archivo `CONTRIBUTING.md` en cada repositorio para ver el **procedimiento detallado de ramas (Git Flow)**. 
-
-### Mensajes de Commit
-Usa mensajes de commit concisos y significativos con los siguientes prefijos:
-
-- **Fix**: `Fix: Fixed the users CRUD`
-- **Feat**: `Feat: Added users CRUD to the backend`
-- **Refactor**: `Refactor: Improved authentication logic`
-
-## Lista de funcionalidades, componentes y composables
-https://docs.google.com/spreadsheets/d/1s2lJcBCdCCeTxu5F6PwWKuIzcNNT5hhBrhVcwPwEjhM/edit?usp=sharing
+### Flujo de Trabajo (Git Flow)
+Consultad el `CONTRIBUTING.md` de cada repo para ver cómo gestionamos las ramas. Para los commits, usamos estos prefijos:
+- `Fix: Fixed the users CRUD`
+- `Feat: Added users CRUD to the backend`
+- `Refactor: Improved authentication logic`
