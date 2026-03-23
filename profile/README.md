@@ -1,6 +1,6 @@
 # Sprint 5 – SIMS Project: Organization Hub (First Deployment)
 
-*(Taula de capçalera: Professorat: Xavi , Joan Iglesias, Maria Merino | Data: 15/09/2025 | Curs: DAW 2)*
+*(Taula de capçalera: Professorat: Xavi , Joan Iglesias, Maria Merino | Data: 23/03/2026 | Curs: DAW 2)*
 
 ## Overview
 
