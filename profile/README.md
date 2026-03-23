@@ -74,7 +74,7 @@ El sistema distingue entre varios tipos de usuarios:
 👉 **[En este Google Sheets tenéis la matriz completa con todas las funcionalidades por rol y los componentes que compartimos](https://docs.google.com/spreadsheets/d/1s2lJcBCdCCeTxu5F6PwWKuIzcNNT5hhBrhVcwPwEjhM/edit?usp=sharing)**
 
 ### Sección de Ayuda (Chatbot RAG)
-Hemos montado una sección de ayuda para los usuarios. Funciona con un Chatbot nutrido con nuestra propia documentación (tipo RAG) y hace llamadas a la API de la IA del instituto (`api-ia.daw2.iesmontsia.org:3000/api`). Dependiendo de si entra un Superadmin o un Cliente normal, la IA adapta sus respuestas a lo que ese usuario puede hacer.
+Hemos decidido no tocar el chatbot en este sprint porque queremos priorizar otros aspectos de la applicación que nos han requerido mas tiempo.
 
 ---
 
