@@ -90,11 +90,17 @@ Para dejar claro en qué punto estamos con el hardware:
 
 ## 6. Despliegue (First Deployment)
 
-Ya tenemos la versión Alfa subida a internet. Como pide el sprint, hemos desplegado las cosas por separado en plataformas gratuitas (PaaS) y hemos automatizado el despliegue multitenant para que añadir nuevos clientes sea rápido.
+Ya tenemos la versión Alfa subida a internet y accesible públicamente. 
 
-* **Frontend desplegado en:** *[Plataforma, ej: Vercel]*
-* **Backend desplegado en:** *[Plataforma, ej: Render]*
-* **Microservicio IoT:** *[Plataforma]*
+Para el despliegue hemos utilizado un servidor VPS en **DigitalOcean**. Para mantener todo organizado y escalable, hemos orquestado la infraestructura usando **Docker Compose**, levantando los servicios en contenedores aislados:
+* **Contenedor 1:** Base de datos (PostgreSQL).
+* **Contenedor 2:** Backend (Laravel).
+* **Contenedor 3:** Frontend (Vue 3).
+
+Además, ya tenemos configurado nuestro dominio oficial en producción. Podéis acceder a la plataforma a través de:
+🌐 **https://voltiacar.live**
+
+*Automatización Multitenant:* Hemos configurado el sistema para que la creación de la base de datos y la configuración de nuevos tenants sea un proceso lo más automatizado posible.
 
 📖 **[Enlace a nuestro Manual de Despliegue]**
 
