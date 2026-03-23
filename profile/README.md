@@ -42,6 +42,8 @@ Para centralizar los datos en el frontend y no freír el servidor a peticiones, 
 Para depurar los errores de la aplicación estuvimos comparando Xdebug, Sentry y Telescope. 
 Xdebug está muy bien para ir línea por línea en local, y Sentry es brutal para ver errores de usuarios en producción. Sin embargo, para esta fase Alfa, **hemos elegido Laravel Telescope**. Nos da un panel dentro del propio Laravel donde podemos ver de un vistazo todas las peticiones HTTP, las consultas a la base de datos (para ver si alguna va lenta) y los Webhooks que nos llegan del IoT.
 
+👉 **[En este enlace se pueden ver capturas de como gestionabamos los errores en el logs y las peticiones con laravel telescope](https://drive.google.com/drive/folders/1uz6ih19r50wEPR5ZbtAKLgnkmbbpL2Ld?usp=sharing)**
+
 ---
 
 ## 3. Usabilidad, Tests y Rendimiento
