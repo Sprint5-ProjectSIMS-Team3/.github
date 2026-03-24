@@ -106,7 +106,7 @@ Xdebug está muy bien para ir línea por línea en local, y Sentry es brutal par
 
 Hemos intentado aplicar el concepto de "No me hagas pensar" de Steve Krug para que la web sea más intuitiva. Algunos de los cambios que hemos metido son:
 
-* *[Mejora 1: Usamos una bottombar en vez de una sidebar para que sea mas atractivo e intuitivo para el usuario]*
+* Mejora 1: Usamos una bottombar en vez de una sidebar para que sea mas atractivo e intuitivo para el usuario*
 
 * *[Añadir mejora 2: ej. Usamos colores semánticos (verde/rojo) para que el estado de los vehículos se entienda sin leer]*
 
