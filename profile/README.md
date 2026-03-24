@@ -50,7 +50,7 @@ Xdebug está muy bien para ir línea por línea en local, y Sentry es brutal par
 
 ### Mejoras de Interfaz (Filosofía de Steve Krug)
 Hemos intentado aplicar el concepto de "No me hagas pensar" de Steve Krug para que la web sea más intuitiva. Algunos de los cambios que hemos metido son:
-* *[Añadir mejora 1: ej. Hemos simplificado el menú lateral para que las acciones principales estén a un clic]*
+* *[Mejora 1: Usamos una bottombar en vez de una sidebar para que sea mas atractivo e intuitivo para el usuario]*
 * *[Añadir mejora 2: ej. Usamos colores semánticos (verde/rojo) para que el estado de los vehículos se entienda sin leer]*
 * *[Añadir mejora 3: ej. Hemos puesto toasters (notificaciones) para que el usuario siempre sepa si una acción ha ido bien o mal]*
 
