@@ -110,7 +110,7 @@ Hemos intentado aplicar el concepto de "No me hagas pensar" de Steve Krug para q
 
 * Mejora 2: Usamos colores semánticos (verde/rojo) para que el estado de los vehículos se entienda sin leer*
 
-* *[Añadir mejora 3: ej. Hemos puesto toasters (notificaciones) para que el usuario siempre sepa si una acción ha ido bien o mal]*
+* Mejora 3: El usuario puede hacer una misma cosa desde diferentes partes de la aplicacion
 
 
 
