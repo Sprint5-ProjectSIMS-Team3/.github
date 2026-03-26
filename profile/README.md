@@ -178,9 +178,20 @@ Hemos decidido no tocar el chatbot en este sprint porque queremos priorizar otro
 
 Para dejar claro en qué punto estamos con el hardware:
 
-* **Estado Actual:** *[Enlace al diagrama de diseño y al modelo de datos JSON]*
+* **Sensores elegidos:** *[Sensor GPS, cámara y relé]*
 
-* **Sensores elegidos:** *[Listar sensores, ej: Hemos decidido tirar adelante con el módulo GPS para la posición]*
+
+* **Estado Actual:** *[Cámara:]*
+* **Estado Actual:** *[Relé:]*
+* **Estado Actual:** *[Sensor GPS: Actualmente, el estado del sensor GPS se gestiona mediante el almacenamiento de las coordenadas en una base de datos MongoDB Atlas. El backend no accede directamente a la base de datos, sino que realiza solicitudes a través de un microservicio dedicado. Este microservicio actúa como intermediario, encargándose de consultar MongoDB Atlas, recuperar las coordenadas más recientes y devolverlas al backend para su procesamiento o visualización.]*
+
+* **Falta:** *[Cámara:]*
+* **Falta:** *[Relé:]*
+* **Falta:** *[Sensor GPS: Como siguiente paso, queda pendiente implementar la lógica en el sensor GPS para que envíe automáticamente su ubicación (latitud y longitud) con una frecuencia de 5 segundos. Este envío se realizará a través del microservicio, que recibirá los datos y los persistirá en MongoDB Atlas. Esto permitirá disponer de actualizaciones en tiempo casi real de la posición del sensor.]*
+
+
+
+
 
 * **Actuador ON/OFF:** Lo hemos implementado con *[explicar brevemente el relé o la placa]* que recibe las órdenes.
 
