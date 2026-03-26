@@ -182,11 +182,11 @@ Para dejar claro en qué punto estamos con el hardware:
 * **Sensores elegidos:** *[Sensor GPS, cámara y relé]*
 
 
-* **Estado Actual:** *[Cámara:]*
+* **Estado Actual:** *[Cámara: Actualmente de la camara, el estado o funciona actual de la camara es hacer fotos y que estas se muestren en la carpeta destinada]*
 * **Estado Actual:** *[Relé:]*
 * **Estado Actual:** *[Sensor GPS: Actualmente, el estado del sensor GPS se gestiona mediante el almacenamiento de las coordenadas en una base de datos MongoDB Atlas. El backend no accede directamente a la base de datos, sino que realiza solicitudes a través de un microservicio dedicado. Este microservicio actúa como intermediario, encargándose de consultar MongoDB Atlas, recuperar las coordenadas más recientes y devolverlas al backend para su procesamiento o visualización.]*
 
-* **Falta:** *[Cámara:]*
+* **Falta:** *[Cámara: Para la camara falta, queda pendiente que pueda escanear el codigo QR que propricionara el frontend a partir de datos del backend, una vez escaneado, la raspberry enviara codigo de vuelta al backend para poder verificar la reserva y activar el vehiculo]*
 * **Falta:** *[Relé:]*
 * **Falta:** *[Sensor GPS: Como siguiente paso, queda pendiente implementar la lógica en el sensor GPS para que envíe automáticamente su ubicación (latitud y longitud) con una frecuencia de 5 segundos. Este envío se realizará a través del microservicio, que recibirá los datos y los persistirá en MongoDB Atlas. Esto permitirá disponer de actualizaciones en tiempo casi real de la posición del sensor.]*
 
