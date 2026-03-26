@@ -125,6 +125,7 @@ Para asegurar la calidad del proyecto, hemos integrado **GitHub Actions**. Este 
 Le hemos pedido a varias personas que no conocían la aplicación (amigos y familiares) que intenten usarla. Les hemos asignado roles y hemos grabado la pantalla y sus voces para ver dónde se atascaban.
 
 * 📄 **[Enlace al Informe de Usabilidad en PDF]**
+https://drive.google.com/drive/folders/1SP4SLB6FkmM61rTalqUYHAbq_bnad4PO?usp=drive_link
 
 * 🎥 **[Enlace a la carpeta con los vídeos de las pruebas]**
 https://drive.google.com/drive/folders/1_VtOPgNk3cQiT9LCuPMqPOzwWEA-Whtt?usp=sharing
