@@ -183,18 +183,15 @@ Para dejar claro en qué punto estamos con el hardware:
 
 
 * **Estado Actual:** *[Cámara: Actualmente de la camara, el estado o funciona actual de la camara es hacer fotos y que estas se muestren en la carpeta destinada]*
-* **Estado Actual:** *[Relé:]*
+* **Estado Actual:** *[Se puede apagar y encender un rele desde la aplicacion desde el lado del cliente, las solicitudes pasan por un tunel de ngrok]*
 * **Estado Actual:** *[Sensor GPS: Actualmente, el estado del sensor GPS se gestiona mediante el almacenamiento de las coordenadas en una base de datos MongoDB Atlas. El backend no accede directamente a la base de datos, sino que realiza solicitudes a través de un microservicio dedicado. Este microservicio actúa como intermediario, encargándose de consultar MongoDB Atlas, recuperar las coordenadas más recientes y devolverlas al backend para su procesamiento o visualización.]*
 
 * **Falta:** *[Cámara: Para la camara, queda pendiente que pueda escanear el codigo QR que propricionara el frontend a partir de datos del backend, una vez escaneado, la raspberry enviara codigo de vuelta al backend para poder verificar la reserva y activar el vehiculo]*
-* **Falta:** *[Relé:]*
+* **Falta:** *[La raspberry debera subir el estado actual del rele a mongo db para posteriormente utulizarlo en un procedimiento de seguridad que comparara datos de mongo y de postgre]*
 * **Falta:** *[Sensor GPS: Como siguiente paso, queda pendiente implementar la lógica en el sensor GPS para que envíe automáticamente su ubicación (latitud y longitud) con una frecuencia de 5 segundos. Este envío se realizará a través del microservicio, que recibirá los datos y los persistirá en MongoDB Atlas. Esto permitirá disponer de actualizaciones en tiempo casi real de la posición del sensor.]*
 
 
 
-
-
-* **Actuador ON/OFF:** Lo hemos implementado con *[explicar brevemente el relé o la placa]* que recibe las órdenes.
 
 * **Comunicación:** El frontend no toca el hardware directamente. Laravel hace de puente comunicándose con el subsistema mediante API y Webhooks. El objetivo de este sprint es dejarlo 100% operativo para que los de automoción puedan integrarlo en el siguiente sprint.
 
