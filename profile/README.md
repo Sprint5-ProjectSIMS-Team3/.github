@@ -1,378 +1,227 @@
 # Sprint 5 – SIMS Project: Organization Hub (First Deployment)
 
-
-
-*(Taula de capçalera: Professorat: Xavi , Joan Iglesias, Maria Merino | Data: 23/03/2026 | Curs: DAW 2)*
-
-
+Professorat: Xavi, Joan Iglesias, Maria Merino | Date: 12/05/2026 | Course: DAW 2
 
 ## Overview
 
+This is the central repository of our organization for Sprint 5. The main objective of this delivery is to move from the prototypes we previously had to a **fully deployed Alpha version**.
 
+To achieve this, we have set up a modern infrastructure using the following stack:
 
-Este es el repositorio central de nuestra organización para el Sprint 5. El objetivo principal de esta entrega es pasar de los prototipos que teníamos a una **versión Alfa completa y desplegada**. 
-
-
-
-Para conseguirlo, hemos montado una infraestructura moderna con el siguiente stack:
-
-- **Frontend**: Vue 3, TypeScript y Tailwind CSS.
-
+- **Frontend**: Vue 3, TypeScript, and Tailwind CSS.
 - **Backend**: Laravel (PHP).
-
-- **Base de Datos**: PostgreSQL.
-
-- **IoT**: Subsistema basado en Python.
-
-
+- **Database**: PostgreSQL.
+- **IoT**: Python-based subsystem.
 
 ---
 
+## 1. Project Restructuring
 
+Since the groups were reorganized for this sprint, the first thing we did was evaluate which codebase we should keep. In the end, we decided to unify the project using the most complete parts we already had:
 
-## 1. Reestructuración del Proyecto
+* **Sabina's Frontend:** We kept her architecture because it already had a very modular logic structure (based on `composables`), TypeScript typing was very well integrated, and visually it was highly consistent thanks to Tailwind.
 
+* **Joel's Backend:** We selected it as the standard because it already had a very robust implementation of security (Sanctum) and the roles and permissions system using Spatie.
 
+### Multi-Tenant and SPA Architecture
 
-Como en este sprint se han rehecho los grupos, lo primero que hicimos fue evaluar qué código base aprovechar. Al final decidimos unificar el proyecto usando las partes más completas que teníamos:
+Our application works with a **multi-tenant architecture**. This allows us to centralize client management: each "tenant" (company/client) is logically isolated, while all tenants share the same database infrastructure, making maintenance much easier.
 
+**Using PostgreSQL Schemas:** To achieve this isolation without mixing data, we use native **PostgreSQL schemas**. We have a central schema (`public`) for general management, and then each client has its own dedicated schema (e.g. `tenant_company1`). This way, vehicle, reservation, and user data from one client are inaccessible to others, ensuring maximum security and performance.
 
-
-* **El Frontend de Sabina:** Nos hemos quedado con su arquitectura porque ya tenía una lógica muy modular (basada en `composables`), el tipado con TypeScript estaba muy bien integrado y visualmente era muy consistente gracias a Tailwind.
-
-* **El Backend de Joel:** Lo hemos elegido como estándar porque ya tenía implementado de forma muy robusta todo el tema de seguridad (Sanctum) y el sistema de roles y permisos con Spatie.
-
-
-
-### Arquitectura Multi-Tenant y SPA
-
-Nuestra aplicación funciona con una **arquitectura multi-tenant**. Esto nos permite centralizar la gestión de clientes: cada "tenant" (empresa/cliente) está aislado lógicamente, pero todos comparten la misma infraestructura de base de datos, lo que nos facilita mucho el mantenimiento.
-
-
-
-**El uso de Esquemas en PostgreSQL:** Para lograr este aislamiento sin mezclar los datos, utilizamos **esquemas (schemas) nativos de PostgreSQL**. Tenemos un esquema central (public) para la gestión general, y luego cada cliente tiene su propio esquema dedicado (ej. `tenant_empresa1`). De esta forma, los datos de los vehículos, reservas y usuarios de un cliente son inaccesibles para el resto, garantizando máxima seguridad y rendimiento.
-
-
-
-El frontend se implementa como una **Single-Page Application (SPA)**. Como las SPA tienen el problema de que Google no las indexa bien, tenemos previsto hacer una Landing page renderizada desde el servidor para solucionar el tema del SEO.
-
-
+The frontend is implemented as a **Single-Page Application (SPA)**. Since SPAs are not indexed efficiently by Google, we plan to create a server-rendered landing page to solve SEO-related issues.
 
 ---
 
+## 2. Sprint 5 Technical Decisions (Research)
 
+As required, here we explain why we chose certain key tools for this phase:
 
-## 2. Decisiones Técnicas del Sprint 5 (Investigación)
+### State Management: Why Pinia?
 
+To centralize frontend data and avoid overloading the server with requests, we evaluated Vuex, Redux, and Pinia.
 
+* We discarded Redux because it is too complex and is mainly used in React.
+* Vuex used to be the standard, but it forces the use of "mutations", which results in a lot of repetitive code.
+* **We chose Pinia** because it is the current official standard for Vue 3. It is much simpler, works perfectly with TypeScript (automatic type inference without extra configuration), and integrates very well with the Composition API we were already using.
 
-Tal y como se pedía en los requisitos, aquí explicamos por qué hemos elegido ciertas herramientas clave para esta fase:
+### Backend Debugging: Why Laravel Telescope?
 
+To debug application errors, we compared Xdebug, Sentry, and Telescope.
 
+Xdebug is excellent for line-by-line debugging locally, and Sentry is very powerful for monitoring production errors. However, for this Alpha phase, **we chose Laravel Telescope**.
 
-### Gestión de estado (State Management): ¿Por qué Pinia?
+It provides a dashboard directly inside Laravel where we can easily inspect all HTTP requests, database queries (to detect slow queries), and IoT webhooks received by the system.
 
-Para centralizar los datos en el frontend y no freír el servidor a peticiones, estuvimos mirando Vuex, Redux y Pinia. 
-
-* Redux lo descartamos porque es demasiado complejo y se usa más en React. 
-
-* Vuex era el estándar antes, pero te obliga a usar "mutaciones", lo que hace que escribas mucho código repetitivo. 
-
-* **Nos quedamos con Pinia** porque es el estándar oficial actual para Vue 3. Es mucho más simple, funciona perfecto con TypeScript (nos autocompleta los tipos sin configurar nada) y encaja genial con la Composition API que ya estábamos usando.
-
-
-
-### Depuración en el Backend: ¿Por qué Laravel Telescope?
-
-Para depurar los errores de la aplicación estuvimos comparando Xdebug, Sentry y Telescope. 
-
-Xdebug está muy bien para ir línea por línea en local, y Sentry es brutal para ver errores de usuarios en producción. Sin embargo, para esta fase Alfa, **hemos elegido Laravel Telescope**. Nos da un panel dentro del propio Laravel donde podemos ver de un vistazo todas las peticiones HTTP, las consultas a la base de datos (para ver si alguna va lenta) y los Webhooks que nos llegan del IoT.
-
-
-
-👉 **[En este enlace se pueden ver capturas de como gestionabamos los errores en el logs y las peticiones con laravel telescope](https://drive.google.com/drive/folders/1uz6ih19r50wEPR5ZbtAKLgnkmbbpL2Ld?usp=sharing)**
-
-
+👉 **[At this link you can see screenshots of how we managed logs and requests using Laravel Telescope](https://drive.google.com/drive/folders/1uz6ih19r50wEPR5ZbtAKLgnkmbbpL2Ld?usp=sharing)**
 
 ---
 
+## 3. Usability, Testing, and Performance
 
+### Interface Improvements (Steve Krug Philosophy)
 
-## 3. Usabilidad, Tests y Rendimiento
+We tried to apply Steve Krug's "Don't Make Me Think" concept to make the website more intuitive. Some of the implemented improvements are:
 
+* Improvement 1: We use a bottom bar instead of a sidebar to make the interface more attractive and intuitive for users.
+* Improvement 2: We use semantic colors (green/red) so vehicle status can be understood without reading text.
+* Improvement 3: Users can perform the same action from different parts of the application.
 
+### Automated Testing and CI/CD
 
-### Mejoras de Interfaz (Filosofía de Steve Krug)
+To ensure project quality, we integrated **GitHub Actions**. This workflow acts as our main automated testing system: every time we make changes, the system verifies that the code is correct before deployment is allowed, preventing server-side issues.
 
-Hemos intentado aplicar el concepto de "No me hagas pensar" de Steve Krug para que la web sea más intuitiva. Algunos de los cambios que hemos metido son:
+### Usability Tests
 
-* Mejora 1: Usamos una bottombar en vez de una sidebar para que sea mas atractivo e intuitivo para el usuario*
+We asked several people unfamiliar with the application (friends and family) to use it. We assigned them roles and recorded both their screens and voices to identify where they struggled.
 
-* Mejora 2: Usamos colores semánticos (verde/rojo) para que el estado de los vehículos se entienda sin leer*
-
-* Mejora 3: El usuario puede hacer una misma cosa desde diferentes partes de la aplicacion
-
-
-
-### Tests Automatizados y CI/CD
-
-Para asegurar la calidad del proyecto, hemos integrado **GitHub Actions**. Este flujo actúa como nuestro test automatizado principal: cada vez que hacemos un cambio, el sistema verifica que todo el código esté correcto antes de permitir el despliegue, evitando errores en el servidor.
-
-
-
-### Tests de Usabilidad
-
-Le hemos pedido a varias personas que no conocían la aplicación (amigos y familiares) que intenten usarla. Les hemos asignado roles y hemos grabado la pantalla y sus voces para ver dónde se atascaban.
-
-* 📄 **[Enlace al Informe de Usabilidad en PDF]**
+* 📄 **[Link to the Usability Report PDF]**
 https://drive.google.com/drive/folders/1SP4SLB6FkmM61rTalqUYHAbq_bnad4PO?usp=drive_link
 
-* 🎥 **[Enlace a la carpeta con los vídeos de las pruebas]**
+* 🎥 **[Link to the folder containing the test videos]**
 https://drive.google.com/drive/folders/1_VtOPgNk3cQiT9LCuPMqPOzwWEA-Whtt?usp=sharing
 
+### Performance
 
-### Rendimiento
+We used Chrome Lighthouse to analyze page speed.
 
-Hemos pasado el "Lighthouse" de Chrome para analizar la velocidad de la página. 
-
-* **Mejoras aplicadas:** *[Añadir qué habéis tocado, ej: Hemos optimizado el peso de las imágenes y configurado lazy-loading para mejorar el tiempo de carga].*
-
-
+* **Implemented improvements:** *[Add what you optimized here, e.g.: We optimized image sizes and configured lazy-loading to improve loading times].*
 
 ---
 
+## 4. Features, Roles, and AI Chatbot
 
+The system distinguishes between several user types:
 
-## 4. Funcionalidades, Roles y Chatbot IA
+1. **Superadmin:** Controls the entire platform and all tenants.
+2. **Tenant Admin:** Manages the fleet and users within their own company.
+3. **Tenant Worker:** Handles maintenance and incidents.
+4. **Final User:** The customer who rents the vehicle.
 
+👉 **[In this Google Sheets document you can find the complete feature matrix by role and the shared components](https://docs.google.com/spreadsheets/d/1s2lJcBCdCCeTxu5F6PwWKuIzcNNT5hhBrhVcwPwEjhM/edit?usp=sharing)**
 
+### Help Section (RAG Chatbot)
 
-El sistema distingue entre varios tipos de usuarios:
-
-1. **Superadmin:** Controla toda la plataforma y los Tenants.
-
-2. **Tenant Admin:** Gestiona la flota y los usuarios de su propia empresa.
-
-3. **Tenant Worker:** Se encarga del mantenimiento y las incidencias.
-
-4. **Final User:** El cliente que alquila el vehículo.
-
-
-
-👉 **[En este Google Sheets tenéis la matriz completa con todas las funcionalidades por rol y los componentes que compartimos](https://docs.google.com/spreadsheets/d/1s2lJcBCdCCeTxu5F6PwWKuIzcNNT5hhBrhVcwPwEjhM/edit?usp=sharing)**
-
-
-
-### Sección de Ayuda (Chatbot RAG)
-
-Hemos decidido no tocar el chatbot en este sprint porque queremos priorizar otros aspectos de la applicación que nos han requerido mas tiempo.
-
-
+We decided not to work on the chatbot during this sprint because we wanted to prioritize other aspects of the application that required more development time.
 
 ---
 
+## 5. IoT Subsystem Status
 
+To clearly define the current state of the hardware:
 
-## 5. Estado del Subsistema IoT
+* **Selected sensors:** *[GPS sensor, camera, and relay]*
 
+* **Current Status:** *[Camera: The camera is currently capable of taking photos and displaying them in the designated folder.]*
+* **Current Status:** *[The relay can be turned on and off from the client-side application. Requests are sent through an ngrok tunnel.]*
+* **Current Status:** *[GPS Sensor: Currently, GPS sensor data is managed by storing coordinates in a MongoDB Atlas database. The backend does not directly access the database; instead, it communicates through a dedicated microservice. This microservice acts as an intermediary, querying MongoDB Atlas, retrieving the latest coordinates, and returning them to the backend for processing or visualization.]*
 
+* **Pending:** *[Camera: The remaining task is to allow the camera to scan the QR code generated by the frontend using backend data. Once scanned, the Raspberry Pi will send the code back to the backend to verify the reservation and activate the vehicle.]*
+* **Pending:** *[The Raspberry Pi must upload the current relay state to MongoDB in order to later use it in a security procedure that compares MongoDB and PostgreSQL data.]*
+* **Pending:** *[GPS Sensor: The next step is to implement the logic for the GPS sensor to automatically send its location (latitude and longitude) every 5 seconds. This data will be sent through the microservice, which will store it in MongoDB Atlas. This will provide near real-time updates of the sensor's location.]*
 
-Para dejar claro en qué punto estamos con el hardware:
-
-* **Sensores elegidos:** *[Sensor GPS, cámara y relé]*
-
-
-* **Estado Actual:** *[Cámara: Actualmente de la camara, el estado o funciona actual de la camara es hacer fotos y que estas se muestren en la carpeta destinada]*
-* **Estado Actual:** *[Se puede apagar y encender un rele desde la aplicacion desde el lado del cliente, las solicitudes pasan por un tunel de ngrok]*
-* **Estado Actual:** *[Sensor GPS: Actualmente, el estado del sensor GPS se gestiona mediante el almacenamiento de las coordenadas en una base de datos MongoDB Atlas. El backend no accede directamente a la base de datos, sino que realiza solicitudes a través de un microservicio dedicado. Este microservicio actúa como intermediario, encargándose de consultar MongoDB Atlas, recuperar las coordenadas más recientes y devolverlas al backend para su procesamiento o visualización.]*
-
-* **Falta:** *[Cámara: Para la camara, queda pendiente que pueda escanear el codigo QR que propricionara el frontend a partir de datos del backend, una vez escaneado, la raspberry enviara codigo de vuelta al backend para poder verificar la reserva y activar el vehiculo]*
-* **Falta:** *[La raspberry debera subir el estado actual del rele a mongo db para posteriormente utulizarlo en un procedimiento de seguridad que comparara datos de mongo y de postgre]*
-* **Falta:** *[Sensor GPS: Como siguiente paso, queda pendiente implementar la lógica en el sensor GPS para que envíe automáticamente su ubicación (latitud y longitud) con una frecuencia de 5 segundos. Este envío se realizará a través del microservicio, que recibirá los datos y los persistirá en MongoDB Atlas. Esto permitirá disponer de actualizaciones en tiempo casi real de la posición del sensor.]*
-
-
-
-
-* **Comunicación:** El frontend no toca el hardware directamente. Laravel hace de puente comunicándose con el subsistema mediante API y Webhooks. El objetivo de este sprint es dejarlo 100% operativo para que los de automoción puedan integrarlo en el siguiente sprint.
-
-
+* **Communication:** The frontend does not interact directly with the hardware. Laravel acts as a bridge by communicating with the subsystem through APIs and webhooks. The goal of this sprint is to make it fully operational so the automotive team can integrate it during the next sprint.
 
 ---
 
+## 6. Deployment (First Deployment)
 
+We already have the Alpha version deployed online and publicly accessible.
 
-## 6. Despliegue (First Deployment)
+For deployment, we used a VPS server on **DigitalOcean**. To keep everything organized and scalable, we orchestrated the infrastructure using **Docker Compose**, running services in isolated containers:
 
+* **Container 1:** Database (PostgreSQL).
+* **Container 2:** Backend (Laravel).
+* **Container 3:** Frontend (Vue 3).
 
+Additionally, our official production domain is already configured. You can access the platform through:
 
-Ya tenemos la versión Alfa subida a internet y accesible públicamente. 
+🌐 **https://fleet-ly.me**
 
+*Multitenant Automation:* We configured the system so that when a new tenant is registered, the creation of its **PostgreSQL schema** and corresponding migrations is automatically executed, streamlining the onboarding process for new clients.
 
-
-Para el despliegue hemos utilizado un servidor VPS en **DigitalOcean**. Para mantener todo organizado y escalable, hemos orquestado la infraestructura usando **Docker Compose**, levantando los servicios en contenedores aislados:
-
-* **Contenedor 1:** Base de datos (PostgreSQL).
-
-* **Contenedor 2:** Backend (Laravel).
-
-* **Contenedor 3:** Frontend (Vue 3).
-
-
-
-Además, ya tenemos configurado nuestro dominio oficial en producción. Podéis acceder a la plataforma a través de:
-
-🌐 **https://voltiacar.live**
-
-
-
-*Automatización Multitenant:* Hemos configurado el sistema para que, al registrar un nuevo tenant, se ejecute automáticamente la creación de su **esquema en PostgreSQL** y sus migraciones correspondientes, agilizando al máximo la entrada de nuevos clientes.
-
-
-
-📖 **[Enlace a nuestro Manual de Despliegue]**
-
-
+📖 **[Link to our Deployment Manual]**
 
 ---
 
+## 7. Our Tech Stack (Libraries and Justification)
 
-
-## 7. Nuestro Tech Stack (Librerías y Justificación)
-
-
-
-Aquí dejamos documentado al detalle todo el stack que usamos y el porqué de cada dependencia, algo que ya consolidamos en el sprint anterior.
-
-
+Here we document in detail the entire stack we use and the reason behind each dependency, which we already consolidated during the previous sprint.
 
 ### Frontend
 
+**Main Dependencies (runtime):**
 
+- `vue`: Main framework (UI, reactivity, Composition API). Mature ecosystem, high performance, and TypeScript compatibility.
+- `vue-router`: SPA routing. Native integration with Vue 3 and support for nested routes.
+- `pinia`: Global state management (explained above).
+- `axios`: HTTP client for API calls. Easier handling of interceptors and timeouts compared to *fetch*.
+- `@tanstack/vue-query`: Remote data management and caching (server state). Saves a lot of work when synchronizing data and retrying failed requests.
+- `@tanstack/vue-table`: Helpers for building advanced tables with pagination and filtering.
+- `@vueuse/core`: Collection of reactive utilities (avoids reinventing the wheel for things like localStorage).
+- `zod`: Runtime data validation for safer payload handling.
+- `lucide-vue-next`: Ready-to-use SVG icons for Vue.
+- `radix-vue`: Accessible low-level UI components.
+- `reka-ui`: Component library (UI kit) used in the project to speed up development.
+- `tailwind-merge` and `clsx`: Utilities to merge and concatenate Tailwind classes without conflicts.
+- `tailwindcss-animate`: Animation utility classes.
+- `vue-sonner`: Toast/notification system for the interface.
+- `vue3-cookies`: Simple session and preference cookie management.
+- `class-variance-authority`: Typed CSS class variant definitions.
 
-**Dependencias principales (runtime):**
+**DevDependencies (development tools):**
 
-- `vue`: Framework principal (UI, reactividad, Composition API). Ecosistema maduro, rendimiento y compatibilidad con TypeScript.
+- `vite` / `@vitejs/plugin-vue`: Our bundler. Extremely fast compilation.
+- `typescript` / `vue-tsc`: Static typing.
+- `tailwindcss` / `@tailwindcss/postcss`: CSS framework.
+- `npm-run-all2`: Runs multiple npm scripts simultaneously.
+- `vite-plugin-vue-devtools`: Integrates Vue DevTools directly into the local environment.
 
-- `vue-router`: Enrutado de la SPA. Integración nativa con Vue 3 y soporte de rutas anidadas.
-
-- `pinia`: Gestión de estado global (explicado arriba).
-
-- `axios`: Cliente HTTP para llamadas a la API. Nos facilita el manejo de interceptores y timeouts respecto a *fetch*.
-
-- `@tanstack/vue-query`: Gestión y caché de datos remotos (server state). Nos ahorra mucho trabajo sincronizando datos y haciendo reintentos.
-
-- `@tanstack/vue-table`: Helpers para construir tablas avanzadas con paginación y filtros.
-
-- `@vueuse/core`: Colección de utilidades reactivas (para no reinventar la rueda con cosas como localStorage).
-
-- `zod`: Validación de datos en runtime para ir seguros con los payloads.
-
-- `lucide-vue-next`: Iconos SVG listos para Vue.
-
-- `radix-vue`: Componentes accesibles de bajo nivel.
-
-- `reka-ui`: Biblioteca de componentes (UI kit) que usamos en el proyecto para ir más rápido.
-
-- `tailwind-merge` y `clsx`: Para mezclar y concatenar clases de Tailwind sin que haya conflictos.
-
-- `tailwindcss-animate`: Clases de animación.
-
-- `vue-sonner`: Para los toasters/notificaciones de la interfaz.
-
-- `vue3-cookies`: Manejo sencillo de cookies de sesión/preferencias.
-
-- `class-variance-authority`: Para definir variantes de clases CSS de forma tipada.
-
-
-
-**DevDependencies (herramientas de desarrollo):**
-
-- `vite` / `@vitejs/plugin-vue`: Nuestro bundler. Compila rapidísimo.
-
-- `typescript` / `vue-tsc`: Tipado estático.
-
-- `tailwindcss` / `@tailwindcss/postcss`: Framework CSS.
-
-- `npm-run-all2`: Para ejecutar varios scripts de npm a la vez.
-
-- `vite-plugin-vue-devtools`: Nos integra las devtools directamente en el entorno local.
-
-
-
-*En resumen: Elegimos librerías que nos den productividad y un buen tipado. Para los datos remotos nos fiamos de vue-query, y para la UI combinamos Tailwind con radix-vue y reka-ui para tener componentes accesibles y consistentes.*
-
-
+*In summary: We chose libraries that improve productivity and provide strong typing. For remote data we rely on vue-query, and for the UI we combine Tailwind with radix-vue and reka-ui to create accessible and consistent components.*
 
 ### Backend
 
 - **Framework:** Laravel
+- **Database:** PostgreSQL
 
-- **Base de Datos:** PostgreSQL
+**Main Libraries:**
 
-
-
-**Librerías principales:**
-
-- **Sanctum:** Nos gestiona los tokens y la seguridad de la API.
-
-- **Spatie (laravel-permission):** Nos permite montar el sistema de Control de Acceso Basado en Roles (RBAC) con permisos granulares (ej. `can.activate.reservation`). 
-
-- **nesbot/carbon:** Básico para el manejo de fechas en PHP. Lo usamos a tope en el `ReservationController` para calcular la duración exacta de los viajes (`diffInMinutes`), cobrar lo que toca y gestionar cuándo caducan las reservas.
-
-
+- **Sanctum:** Handles API token authentication and security.
+- **Spatie (laravel-permission):** Allows us to implement a Role-Based Access Control (RBAC) system with granular permissions (e.g. `can.activate.reservation`).
+- **nesbot/carbon:** Essential for date handling in PHP. We use it extensively in the `ReservationController` to calculate trip durations (`diffInMinutes`), manage pricing, and handle reservation expiration logic.
 
 ---
 
+## 8. Repository Structure and Rules
 
+We separated the code into three repositories within the same organization. Each repository contains its folder structure documented in its own `README.md`.
 
-## 8. Estructura de Repositorios y Reglas
+* 📂 [Frontend Repository](https://github.com/Sprint5-ProjectSIMS-Team3/sims-frontend)
 
+* 📂 [Backend Repository](https://github.com/Sprint5-ProjectSIMS-Team3/sims-backend)
 
+* 📂 [IoT Subsystem Repository](https://github.com/Sprint5-ProjectSIMS-Team3/sims-subsystem)
 
-Tenemos el código separado en tres repositorios dentro de esta misma organización. En el `README.md` de cada uno está la estructura de carpetas:
+### Governance
 
+* We added a **Contributor Covenant** to all repositories.
+* The project is licensed under the **EUPL** license.
 
+### Code Conventions
 
-* 📂 [Repositorio Frontend](https://github.com/Sprint5-ProjectSIMS-Team3/sims-frontend) 
-
-* 📂 [Repositorio Backend](https://github.com/Sprint5-ProjectSIMS-Team3/sims-backend) 
-
-* 📂 [Repositorio Subsistema IoT](https://github.com/Sprint5-ProjectSIMS-Team3/sims-subsystem)
-
-
-
-### Gobernanza
-
-* Hemos añadido un **Contributor Covenant** en todos los repositorios.
-
-* El proyecto está bajo la licencia **EUPL**.
-
-
-
-### Convenciones de Código
-
-Todos intentamos seguir estas reglas para mantener el código limpio:
+We all try to follow these rules to keep the codebase clean:
 
 - **Composables**: `useComposableName.ts`
+- **Components**: `PascalCase.vue`
+- **Classes**: `PascalCase`
+- **Routes**: `kebab-case`
+- **Variables and functions**: `camelCase`
+- **Language:** All code, filenames, and comments **must be written in English**.
 
-- **Componentes**: `PascalCase.vue`
+### Workflow (Git Flow)
 
-- **Clases**: `PascalCase`
-
-- **Rutas**: `kebab-case`
-
-- **Variables y funciones**: `camelCase`
-
-- **Idioma:** Todo el código, nombres de archivos y comentarios **deben estar en inglés**.
-
-
-
-### Flujo de Trabajo (Git Flow)
-
-Consultad el `CONTRIBUTING.md` de cada repo para ver cómo gestionamos las ramas. Para los commits, usamos estos prefijos:
+Check the `CONTRIBUTING.md` file in each repository to see how we manage branches. For commits, we use the following prefixes:
 
 - `Fix: Fixed the users CRUD`
-
 - `Feat: Added users CRUD to the backend`
-
-- `Refactor: Improved authentication logic` esto?
+- `Refactor: Improved authentication logic`
