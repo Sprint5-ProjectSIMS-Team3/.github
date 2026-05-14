@@ -1,4 +1,4 @@
-# Sprint 5 – SIMS Project: Organization Hub (First Deployment)
+# Sprint 6 – Sprint6-Chaos & Delivery
 
 Professorat: Xavi, Joan Iglesias, Maria Merino | Date: 12/05/2026 | Course: DAW 2
 
@@ -225,3 +225,7 @@ Check the `CONTRIBUTING.md` file in each repository to see how we manage branche
 - `Fix: Fixed the users CRUD`
 - `Feat: Added users CRUD to the backend`
 - `Refactor: Improved authentication logic`
+
+👉 **[You can access to the sites of the place]([https://docs.google.com/spreadsheets/d/1s2lJcBCdCCeTxu5F6PwWKuIzcNNT5hhBrhVcwPwEjhM/edit?usp=sharing](https://sites.google.com/iesmontsia.org/grup3/p%C3%A0gina-dinici?authuser=2))**
+
+
