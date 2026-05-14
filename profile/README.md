@@ -226,6 +226,6 @@ Check the `CONTRIBUTING.md` file in each repository to see how we manage branche
 - `Feat: Added users CRUD to the backend`
 - `Refactor: Improved authentication logic`
 
-👉 **[You can access to the sites of the place]([https://docs.google.com/spreadsheets/d/1s2lJcBCdCCeTxu5F6PwWKuIzcNNT5hhBrhVcwPwEjhM/edit?usp=sharing](https://sites.google.com/iesmontsia.org/grup3/p%C3%A0gina-dinici?authuser=2))**
+* 📂 [Sites](https://sites.google.com/iesmontsia.org/grup3/p%C3%A0gina-dinici?authuser=2)
 
 
